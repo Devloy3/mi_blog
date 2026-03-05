@@ -22,36 +22,49 @@ const posts = (await getCollection('exclusivo')).sort(
 			}
 			ul {
 				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
+    			flex-direction: column; /* CORRECTO */
+    			flex-wrap: wrap;
+    			gap: 2rem;
+    			list-style-type: none;
+    			margin: 0;
+    			padding: 0;
 			}
 			ul li {
-				width: calc(50% - 1rem);
+				border-bottom: 1px solid #eee;
+    			padding-bottom: 2rem;
 			}
 			ul li * {
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
 			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
+				width: 100% !important;
+    			margin-top: 0 !important; /* Añade esto */
+    			margin-bottom: 2rem !important; /* Dale el mismo margen que a los demás */
+    			text-align: left;
 			}
 			ul li:first-child img {
-				width: 100%;
+				width: 300px !important;
 			}
 			ul li:first-child .title {
 				font-size: 2.369rem;
 			}
 			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
+				width: 300px !important;   
+    			height: 200px !important;  
+    
+    			object-fit: cover !important; 
+    			aspect-ratio: 3 / 2;
+    
+    			flex-shrink: 0; /* Impide que el texto empuje la imagen y la encoja */
+    			border-radius: 12px;
 			}
 			ul li a {
-				display: block;
+				display: flex;
+    			flex-direction: row; /* Imagen a la izquierda, texto a la derecha */
+    			gap: 2rem;
+    			align-items: flex-start;
+    			text-decoration: none;
 			}
 			.title {
 				margin: 0;
@@ -68,6 +81,25 @@ const posts = (await getCollection('exclusivo')).sort(
 			}
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
+			}
+			.description {
+    			margin: 0.5rem 0;
+    			color: rgb(var(--gray));
+    			font-size: 1.1rem;
+    			line-height: 1.4;
+    			display: -webkit-box;
+    			-webkit-line-clamp: 3;
+    			-webkit-box-orient: vertical;  
+   			 	overflow: hidden;
+			}
+			.content-text {
+    			display: flex;
+    			flex-direction: column;
+    			justify-content: flex-start; /* Alinea arriba */
+    			padding-top: 0.5rem
+			}
+			ul li:last-child {
+    			border-bottom: none;
 			}
 			@media (max-width: 720px) {
 				ul {
