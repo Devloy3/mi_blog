@@ -1,0 +1,20 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import Exclusivo from '../../layouts/BlogPost.astro'; // Usamos el mismo diseño que el blog
+
+export async function getStaticPaths() {
+	const posts = await getCollection('exclusivo'); // <--- IMPORTANTE: Aquí cambiamos 'blog' por 'exclusivo'
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'exclusivo'>;
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<Exclusivo {...post.data}>
+	<Content />
+</Exclusivo>
