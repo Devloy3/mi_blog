@@ -4,6 +4,11 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import miFoto from '../assets/eloy.jpg';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+).slice(0,1);
 ---
 
 <!doctype html>
@@ -24,6 +29,26 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
     			display: block;
     			margin: 20px auto;
 			}
+			.latest-posts {
+				max-width: 800px;
+				margin: 4rem auto;
+				padding: 0 1rem;
+			}
+		.grid-posts {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 2rem;
+		}
+		.post-card {
+			border: 1px solid #eee;
+			padding: 1.5rem;
+			border-radius: 8px;
+			transition: transform 0.2s;
+		}
+		.post-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		}
 		</style>
 		   
 	</head>
@@ -32,14 +57,22 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<main>
 			<img src={miFoto.src} alt="Mi Foto de Perfil" class= "imagen" />
 			<br/>
-			<h1 class="Titulo">Hola Soy Eloy<h1/>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
+			<h1 class="Titulo">Soy Eloy<h1/>
+			<br/>
+			<p>Bienvenidos a mi blog, un blog donde encontrareis todo tipo de posts, posts donde te invitara a soñar y creer, o posts donde tal vez debas preguntarte y saber a que direccion va el mundo, todo desde un enfoque 100% humanista, y donde todas las ideas son invitadas a reflexionar y a pensar como individuos pensantes de una sociedad libre y democratica.</p>
+			<section class="latest-posts">
+  				<h3>Ultimo Post:</h3>
+  				<div class="grid-posts">
+    				{
+     		 			posts.map((post) => (
+								<article class="post-card">
+									<h4 class="title">{post.data.title}</h4>
+                        			<p class="description">{post.data.description}</p>
+									<a href={`/blog/${post.id}/`}>Leer más →</a>
+    							</article>))
+					}
+ 				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>

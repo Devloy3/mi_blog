@@ -8,139 +8,138 @@ import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('exclusivo')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-    			flex-direction: column; /* CORRECTO */
-    			flex-wrap: wrap;
-    			gap: 2rem;
-    			list-style-type: none;
-    			margin: 0;
-    			padding: 0;
-			}
-			ul li {
-				border-bottom: 1px solid #eee;
-    			padding-bottom: 2rem;
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100% !important;
-    			margin-top: 0 !important; /* Añade esto */
-    			margin-bottom: 2rem !important; /* Dale el mismo margen que a los demás */
-    			text-align: left;
-			}
-			ul li:first-child img {
-				width: 300px !important;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				width: 300px !important;   
-    			height: 200px !important;  
-    
-    			object-fit: cover !important; 
-    			aspect-ratio: 3 / 2;
-    
-    			flex-shrink: 0; /* Impide que el texto empuje la imagen y la encoja */
-    			border-radius: 12px;
-			}
-			ul li a {
-				display: flex;
-    			flex-direction: row; /* Imagen a la izquierda, texto a la derecha */
-    			gap: 2rem;
-    			align-items: flex-start;
-    			text-decoration: none;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			.description {
-    			margin: 0.5rem 0;
-    			color: rgb(var(--gray));
-    			font-size: 1.1rem;
-    			line-height: 1.4;
-    			display: -webkit-box;
-    			-webkit-line-clamp: 3;
-    			-webkit-box-orient: vertical;  
-   			 	overflow: hidden;
-			}
-			.content-text {
-    			display: flex;
-    			flex-direction: column;
-    			justify-content: flex-start; /* Alinea arriba */
-    			padding-top: 0.5rem
-			}
-			ul li:last-child {
-    			border-bottom: none;
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/Exclusivo/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+    <head>
+        <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+        <style>
+            /* ESTILOS DEL MURO */
+            .paywall-overlay {
+                position: fixed;
+                top: 0; left: 0;
+                width: 100%; height: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                z-index: 10000; /* Por encima de todo */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .paywall-card {
+                background: white;
+                padding: 3rem;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                text-align: center;
+                max-width: 450px;
+                border: 2px solid #ffcc00;
+            }
+            .hidden-content {
+                display: none; /* Mejor usar display none para que no se pueda interactuar */
+            }
+
+            /* ESTILOS DE TUS POSTS */
+            main { width: 960px; max-width: calc(100% - 2rem); margin: auto; }
+            ul { display: flex; flex-direction: column; gap: 2rem; list-style-type: none; margin: 0; padding: 0; }
+            ul li { border-bottom: 1px solid #eee; padding-bottom: 2rem; }
+            ul li a { display: flex; flex-direction: row; gap: 2rem; align-items: flex-start; text-decoration: none; color: inherit; }
+            ul li img { width: 300px; height: 200px; object-fit: cover; border-radius: 12px; }
+            .content-text { display: flex; flex-direction: column; padding-top: 0.5rem; }
+            .title { margin: 0; font-size: 1.5rem; line-height: 1.2; }
+            
+            @media (max-width: 720px) {
+                ul li a { flex-direction: column; }
+                ul li img { width: 100%; }
+            }
+        </style>
+    </head>
+    <body>
+        <Header />
+
+        <div id="paywall-screen" class="paywall-overlay">
+            <div class="paywall-card">
+                <h2>Want to read my posts in English?</h2>
+                <p>In the Anglo-Saxon world, you've taught us that everything on the internet has a price. My project is free for the Spanish-speaking community, but if you want it translated into English, it's time to play my rules.</p>
+				<p>Access fee: 10€.</p>
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+
+        <main id="content-to-hide" class="hidden-content">
+            <section>
+                <h1>Mis Publicaciones Exclusivas</h1>
+                <ul>
+                    {posts.map((post) => (
+                        <li>
+                            <a href={`/Exclusivo/${post.id}/`}>
+                                {post.data.heroImage && (
+                                    <Image width={720} height={360} src={post.data.heroImage} alt="" />
+                                )}
+                                <div class="content-text">
+                                    <h4 class="title">{post.data.title}</h4>
+                                    <p class="date">
+                                        <FormattedDate date={post.data.pubDate} />
+                                    </p>
+                                    <p class="description">{post.data.description}</p>
+                                </div>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        </main>
+
+        <Footer />
+
+        <script is:inline src="https://www.paypal.com/sdk/js?client-id=AbzSaYhWxmBGCStHRdz_5G9biONPzMixKyajqaFKuS0TJQV-7RKzUH775nEdNz8pld9mV7xt-tIUu7FW&currency=EUR"></script>
+
+	<script is:inline>
+    // Función para desbloquear la web
+    function desbloquearWeb() {
+        const paywall = document.getElementById('paywall-screen');
+        const content = document.getElementById('content-to-hide');
+        if (paywall) paywall.style.display = 'none';
+        if (content) content.style.display = 'block';
+    }
+
+    // Comprobar si ya pagó antes de cargar el botón
+    if (sessionStorage.getItem('pagoExitoso') === 'true') {
+        desbloquearWeb();
+    } else {
+        // Solo renderizar el botón si NO ha pagado
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color:  'gold', // El amarillo de PayPal que pega con tu blog
+                shape:  'pill',
+                label:  'paypal'
+            },
+            createOrder: function(data, actions) {
+                return actions.order.create({
+					description: "Acceso post Devloy",
+                    purchase_units: [{
+						currency_code: 'EUR',
+                        value: '10.00'  
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // ¡ÉXITO! Guardamos en la sesión
+                    sessionStorage.setItem('pagoExitoso', 'true');
+                    desbloquearWeb();
+                    alert('¡Gracias ' + details.payer.name.given_name + '! Ya puedes leer todos los posts.');
+                });
+            },
+            onError: function (err) {
+                console.error('Error en el pago:', err);
+                alert('Hubo un problema con el pago. Inténtalo de nuevo.');
+            }
+        }).render('#paypal-button-container');
+    }
+</script>
+    </body>
 </html>
