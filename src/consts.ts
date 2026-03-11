@@ -1,5 +1,5 @@
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
-export const SITE_TITLE = 'El Cajón de Eloy';
+export const SITE_TITLE = 'Devloy3 al dia';
 export const SITE_DESCRIPTION = 'Bienvenido a mi blog personal!';
