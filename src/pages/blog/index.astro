@@ -126,7 +126,7 @@ const posts = (await getCollection('blog')).sort(
 					{
 						posts.map((post,index) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/mi_blog/blog/${post.id}/`}>
 						<Image width={720} height={360} src={post.data.heroImage} alt={post.data.title} loading={index === 0 ? "eager" : "lazy"} />
     <div class="content-text">
         <h4 class="title">{post.data.title}</h4>
