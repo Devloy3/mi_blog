@@ -1,5 +1,4 @@
 ---
-// Importamos el CSS global donde se definen las fuentes
 import '../styles/global.css';
 
 interface Props {
@@ -12,16 +11,16 @@ const { title, description } = Astro.props;
 const canonicalURL = Astro.url.href
 ---
 
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 
-<link rel="icon" type="image/png" href="/logo.png" />
+<link rel="icon" type="image/png" href="/logo.png"/>
 
 <title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
+<meta name="title" content={title}/>
+<meta name="description" content={description}/>
 
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin/>
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin/>
 
-<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+<link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}/>
