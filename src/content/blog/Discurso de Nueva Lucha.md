@@ -1,7 +1,7 @@
 ---
 title: 'Discurso de la Nueva Lucha'
 description: 'Discurso de la nueva lucha que esta por venir en el siglo XXI, y siglo XXII'
-pubDate: 'Mar 12 2026'
+pubDate: 2026-03-12
 heroImage: '../../assets/FotoRevolucionaria.png'
 ---
 
@@ -15,8 +15,7 @@ prosperar a la clase media durante un pequeño tiempo, pero cada vez esa
 tecnología ha sido __usurpada por grandes tecnológicas__ que nos quieren 
 empobrecer.
 
-Hemos dado el mando a grandes compañías que solo quieren __poder, dinero e 
-influencia__ en el mundo y nuestros datos para hacerse ricos a costa de 
+Hemos dado el mando a grandes compañías que solo quieren __poder, dinero e influencia__ en el mundo y nuestros datos para hacerse ricos a costa de 
 ellos, y gracias a ellos también hacernos desviar la atención de las cosas 
 importantes.
 
